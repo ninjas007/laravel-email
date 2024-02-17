@@ -12,7 +12,7 @@ class EmailController extends Controller
         $data = [
             [
                 'id' => 1,
-                'nama' => 'John Doe',
+                'nama' => 'Tilis Tiadi',
                 'email' => 'tilistiadi03@gmail.com',
             ]
         ];
