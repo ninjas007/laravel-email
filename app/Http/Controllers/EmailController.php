@@ -14,11 +14,6 @@ class EmailController extends Controller
                 'id' => 1,
                 'nama' => 'John Doe',
                 'email' => 'tilistiadi03@gmail.com',
-            ],
-            [
-                'id' => 2,
-                'nama' => 'John Doe 2',
-                'email' => 'tiliztiadi@gmail.com',
             ]
         ];
 
