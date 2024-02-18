@@ -1,1 +1,1 @@
-Test email untuk user {{ $data['nama'] }} {{ $data['email'] }}
+Test email untuk user {{ $data->name }} {{ $data->email }}

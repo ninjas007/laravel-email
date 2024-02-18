@@ -28,7 +28,7 @@ class EmailController extends Controller
     {
         try {
             // kirim email
-            Mail::to($user['email'])->send(new \App\Mail\SendEmail($user));
+            Mail::to($user->email)->send(new \App\Mail\SendEmail($user));
 
             // update terkirim
             User::where('id', $user->id)->update(['is_sent' => 1]);
