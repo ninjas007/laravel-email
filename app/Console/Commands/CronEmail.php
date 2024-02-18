@@ -39,15 +39,11 @@ class CronEmail extends Command
      */
     public function handle()
     {
-        if (app('config.env') == 'local') {
-            app(\App\Http\Controllers\EmailController::class)->index();
-        } else {
-            $data = User::where('is_sent', 0)->limit(5)->get();
+        $data = User::where('is_sent', 0)->limit(5)->get();
 
-            if ($data) {
-                foreach ($data as $d) {
-                    app(\App\Http\Controllers\EmailController::class)->send($d);
-                }
+        if ($data) {
+            foreach ($data as $d) {
+                app(\App\Http\Controllers\EmailController::class)->send($d);
             }
         }
     }
