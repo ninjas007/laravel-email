@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 
 class CronEmail extends Command
 {
@@ -37,6 +39,16 @@ class CronEmail extends Command
      */
     public function handle()
     {
-        app(\App\Http\Controllers\EmailController::class)->index();
+        if (app('config.env') == 'local') {
+            app(\App\Http\Controllers\EmailController::class)->index();
+        } else {
+            $data = User::where('is_sent', 0)->limit(5)->get();
+
+            if ($data) {
+                foreach ($data as $d) {
+                    app(\App\Http\Controllers\EmailController::class)->send($d);
+                }
+            }
+        }
     }
 }

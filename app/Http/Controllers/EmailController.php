@@ -10,6 +10,10 @@ class EmailController extends Controller
 {
     public function index()
     {
+        if (config('app.env') != 'local') {
+            return redirect()->route('user.index');
+        }
+
         $data = User::where('is_sent', 0)->limit(5)->get();
 
         if ($data) {
@@ -20,12 +24,17 @@ class EmailController extends Controller
 
     }
 
-    private function send($user)
+    public function send($user)
     {
-        // Mail::to($user['email'])->send(new \App\Mail\SendEmail($user));
+        try {
+            // kirim email
+            Mail::to($user['email'])->send(new \App\Mail\SendEmail($user));
 
-        $user->update([
-            'is_sent' => 1
-        ]);
+            // update terkirim
+            User::where('id', $user->id)->update(['is_sent' => 1]);
+        } catch (\Throwable $th) {
+            echo 'Error: ' . $th->getMessage();
+        }
+
     }
 }
