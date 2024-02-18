@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -9,23 +10,22 @@ class EmailController extends Controller
 {
     public function index()
     {
-        $data = [
-            [
-                'id' => 1,
-                'nama' => 'Tilis Tiadi',
-                'email' => 'tilistiadi03@gmail.com',
-            ]
-        ];
+        $data = User::where('is_sent', 0)->limit(5)->get();
 
-        foreach ($data as $d) {
-            $this->send($d);
+        if ($data) {
+            foreach ($data as $d) {
+                $this->send($d);
+            }
         }
 
-        echo 'berhasil kirim';
     }
 
     private function send($user)
     {
-        Mail::to($user['email'])->send(new \App\Mail\SendEmail($user));
+        // Mail::to($user['email'])->send(new \App\Mail\SendEmail($user));
+
+        $user->update([
+            'is_sent' => 1
+        ]);
     }
 }
