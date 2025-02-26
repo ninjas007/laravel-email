@@ -30,8 +30,41 @@ class SendEmail extends Mailable
      */
     public function build()
     {
-        return $this->subject('3 Ebook Lengkap Microsoft Excel Untuk Mahir Excel')
-                ->view('email', [
+        if ($this->data->template_email == 1) {
+            return $this
+                ->subject('Kirim Mail')
+                ->view('email1', [
+                    'data' => $this->data
+                ]);
+        }
+
+        if ($this->data->template_email == 2) {
+            return $this
+                ->subject('Kirim Mail')
+                ->view('email2', [
+                    'data' => $this->data
+                ]);
+        }
+
+        if ($this->data->template_email == 3) {
+            return $this
+                ->subject('Kirim Mail')
+                ->view('email3', [
+                    'data' => $this->data
+                ]);
+        }
+
+        if ($this->data->template_email == 4) {
+            return $this
+                ->subject('Kirim Mail')
+                ->view('email4', [
+                    'data' => $this->data
+                ]);
+        }
+
+        return $this
+            ->subject('3 Ebook Lengkap Microsoft Excel Untuk Mahir Excel')
+            ->view('email', [
                 'data' => $this->data
             ]);
     }

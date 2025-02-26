@@ -13,7 +13,7 @@ class CronEmail extends Command
      *
      * @var string
      */
-    protected $signature = 'cron:email';
+    protected $signature = 'cron:email {--template_email= : Template email yang digunakan}';
 
     /**
      * The console command description.
@@ -39,14 +39,16 @@ class CronEmail extends Command
      */
     public function handle()
     {
-        $data = User::where('is_sent', 0)->limit(15)->get();
+        $templateEmail = $this->option('template_email') ?? null;
+
+        $data = User::where('is_sent', 0)->where('template_email', $templateEmail)->limit(15)->get();
 
         if ($data) {
             foreach ($data as $d) {
                 app(\App\Http\Controllers\EmailController::class)->send($d);
             }
         }
-        
+
         echo 'selesai';
     }
 }
