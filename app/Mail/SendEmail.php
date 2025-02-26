@@ -30,7 +30,7 @@ class SendEmail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Kirim Mail')
+        return $this->subject('3 Ebook Lengkap Microsoft Excel Untuk Mahir Excel')
                 ->view('email', [
                 'data' => $this->data
             ]);

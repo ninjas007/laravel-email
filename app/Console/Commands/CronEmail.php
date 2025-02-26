@@ -39,12 +39,14 @@ class CronEmail extends Command
      */
     public function handle()
     {
-        $data = User::where('is_sent', 0)->limit(5)->get();
+        $data = User::where('is_sent', 0)->limit(15)->get();
 
         if ($data) {
             foreach ($data as $d) {
                 app(\App\Http\Controllers\EmailController::class)->send($d);
             }
         }
+        
+        echo 'selesai';
     }
 }
