@@ -41,7 +41,11 @@ class CronEmail extends Command
     {
         $templateEmail = $this->option('template_email') ?? null;
 
-        $data = User::where('is_sent', 0)->where('template_email', $templateEmail)->limit(15)->get();
+        $data = User::where('is_sent', 0)
+                ->where('template_email', $templateEmail)
+                ->where('role', 'user')
+                ->limit(15)
+                ->get();
 
         if ($data) {
             foreach ($data as $d) {
