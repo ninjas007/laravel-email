@@ -17,12 +17,12 @@
                 </div>
                 <div class="card-body py-0">
                     <div class="table-responsive">
-                        <table class="table table-bordered">
+                        <table class="table table-bordered table-striped">
                             <thead>
-                                <tr>
+                                <tr class="bg-primary text-white">
                                     <th width="5%" class="text-center">No</th>
                                     <th>Nama</th>
-                                    <th class="text-center" width="10%">Aksi</th>
+                                    <th class="text-center" width="8%">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -31,11 +31,11 @@
                                         <td class="text-center">{{ $key + 1 }}</td>
                                         <td>{{ $group->name }}</td>
                                         <td class="text-center">
-                                            <a href="javascript:void(0)" class="btn btn-primary btn-sm"
-                                                onclick="editList(`{{ $group->id }}`)"><i class="fa fa-edit"></i>
+                                            <a href="javascript:void(0)"
+                                                onclick="editList(`{{ $group->id }}`)"><i class="mx-2 fa fa-pencil text-primary fs18"></i>
                                             </a>
-                                            <a href="javascript:void(0)" class="btn btn-danger btn-sm"
-                                                onclick="deleteList(`{{ $group->id }}`)"><i class="fa fa-trash"></i>
+                                            <a href="javascript:void(0)"
+                                                onclick="deleteList(`{{ $group->id }}`)"><i class="fa fa-trash text-danger fs18"></i>
                                             </a>
                                         </td>
                                     </tr>

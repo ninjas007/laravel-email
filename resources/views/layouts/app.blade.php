@@ -25,6 +25,12 @@
 
     @yield('css')
 
+    <style>
+        .fs18 {
+            font-size: 18px;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -240,10 +246,11 @@
         async function deleteData(url) {
             swal({
                 title: "Hapus Data",
-                text: "Yakin ingin mendelete data ini",
+                text: "Yakin ingin menghapus data ini",
                 icon: "warning",
                 buttons: true,
-                dangerMode: true,
+                buttons: ["Tidak", "Ya"],
+                dangerMode: false,
             })
             .then((willDelete) => {
                 if (willDelete) {

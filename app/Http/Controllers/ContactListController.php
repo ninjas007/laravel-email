@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\ContactList;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class ContactListController extends Controller
 {
@@ -42,8 +41,8 @@ class ContactListController extends Controller
                 'status' => 'success',
                 'message' => 'Data berhasil disimpan'
             ]);
-        } catch (\Throwable $th) {
-            Log::info('error', $th->getMessage() . ' - ' . $th->getLine() . ' - ' . $th->getFile());
+        } catch (\Exception $e) {
+            $this->logError($request, $e);
 
             return response()->json([
                 'status' => 'error',
@@ -96,8 +95,8 @@ class ContactListController extends Controller
                 'status' => 'success',
                 'message' => 'Data berhasil disimpan'
             ]);
-        } catch (\Throwable $th) {
-            Log::info('error', $th->getMessage() . ' - ' . $th->getLine() . ' - ' . $th->getFile());
+        } catch (\Exception $e) {
+            $this->logError($request, $e);
 
             return response()->json([
                 'status' => 'error',
@@ -122,8 +121,8 @@ class ContactListController extends Controller
                 'status' => 'success',
                 'message' => 'Data berhasil dihapus'
             ]);
-        } catch (\Throwable $th) {
-            Log::info('error', $th->getMessage() . ' - ' . $th->getLine() . ' - ' . $th->getFile());
+        } catch (\Exception $e) {
+            $this->logError($id, $e);
 
             return response()->json([
                 'status' => 'error',

@@ -30,6 +30,8 @@ Route::middleware(['auth'])->group(function () {
 
     // contacts
     Route::resource('contacts', ContactController::class);
+    Route::post('contacts/upload', [ContactController::class, 'uploadFile'])->name('contacts.uploadFile');
+    Route::post('contacts/process-file', [ContactController::class, 'processBatch'])->name('contacts.processBatch');
 });
 
 Route::resource('user', UserController::class);

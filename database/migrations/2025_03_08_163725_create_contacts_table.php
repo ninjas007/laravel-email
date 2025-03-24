@@ -18,8 +18,7 @@ class CreateContactsTable extends Migration
             $table->string('email');
             $table->string('name')->nullable();
             $table->string('phone')->nullable();
-            $table->tinyInteger('is_sent')->default(0);
-            $table->integer('contact_group_id')->nullable();
+            $table->json('contact_list_id')->nullable();
             $table->timestamps();
         });
     }
