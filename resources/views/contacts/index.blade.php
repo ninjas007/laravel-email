@@ -48,10 +48,10 @@
                                         <td>{{ $contact->email }}</td>
                                         <td>{{ $contact->phone }}</td>
                                         <td class="text-center">
-                                            <a href="javascript:void(0)" onclick="editContact(`{{ $contact->id }}`)">
+                                            <a href="javascript:void(0)" onclick="editContact(`{{ encodeId($contact->id) }}`)">
                                                 <i class="mx-2 fa fa-pencil text-primary fs18"></i>
                                             </a>
-                                            <a href="javascript:void(0)" onclick="deleteContact(`{{ $contact->id }}`)">
+                                            <a href="javascript:void(0)" onclick="deleteContact(`{{ encodeId($contact->id) }}`)">
                                                 <i class="fa fa-trash text-danger fs18"></i>
                                             </a>
                                         </td>

@@ -22,20 +22,25 @@
                                 <tr class="bg-primary text-white">
                                     <th width="5%" class="text-center">No</th>
                                     <th>Nama</th>
-                                    <th class="text-center" width="8%">Aksi</th>
+                                    <th class="text-center" width="10%">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($contactLists as $key => $group)
+                                @forelse ($contactLists as $key => $list)
                                     <tr>
                                         <td class="text-center">{{ $key + 1 }}</td>
-                                        <td>{{ $group->name }}</td>
+                                        <td>
+                                            <a href="{{ url('lists') }}/{{ encodeId($list->id) }}" class="text-primary font-weight-bold">{{ $list->name }}</a>
+                                        </td>
                                         <td class="text-center">
-                                            <a href="javascript:void(0)"
-                                                onclick="editList(`{{ $group->id }}`)"><i class="mx-2 fa fa-pencil text-primary fs18"></i>
+                                            <a href="{{ route('lists.show', encodeId($list->id)) }}" title="Detail List">
+                                                <i class="fa fa-users text-info fs18"></i>
                                             </a>
-                                            <a href="javascript:void(0)"
-                                                onclick="deleteList(`{{ $group->id }}`)"><i class="fa fa-trash text-danger fs18"></i>
+                                            <a href="javascript:void(0)" title="Edit List" onclick="editList(`{{ encodeId($list->id) }}`)"><i
+                                                    class="mx-2 fa fa-pencil text-primary fs18"></i>
+                                            </a>
+                                            <a href="javascript:void(0)" title="Hapus List" onclick="deleteList(`{{ encodeId($list->id) }}`)"><i
+                                                    class="fa fa-trash text-danger fs18"></i>
                                             </a>
                                         </td>
                                     </tr>
@@ -88,6 +93,13 @@
 
 @section('js')
     <script>
+        $(document).ready(function() {
+            $('#modalCreate').on('hidden.bs.modal', function() {
+                $('#contactListId').val('');
+                $('#name').val('');
+            })
+        });
+
         async function deleteList(id) {
             let url = "{{ url('lists') }}/" + id;
             await deleteData(url);
@@ -110,7 +122,7 @@
         }
 
         async function editList(id) {
-            getData(`{{ url('lists') }}/${id}`)
+            getData(`{{ url('lists') }}/${id}/edit`)
                 .then((res) => {
                     let data = res.data;
                     $('#name').val(data.name);

@@ -74,6 +74,7 @@ class ContactController extends Controller
      */
     public function show($id)
     {
+        $id = decodeId($id);
         $contact = Contact::find($id);
 
         if (!$contact) {
@@ -103,6 +104,7 @@ class ContactController extends Controller
         ]);
 
         try {
+            $id = decodeId($id);
             $contact = Contact::find($id);
 
             if (!$contact) {
@@ -137,6 +139,7 @@ class ContactController extends Controller
      */
     public function destroy($id)
     {
+        $id = decodeId($id);
         $contact = Contact::find($id);
 
         if (!$contact) {

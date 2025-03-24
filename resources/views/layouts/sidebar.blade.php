@@ -13,12 +13,12 @@
             <li class="nav-label">Kontak</li>
             <li>
                 <a href="{{ url('/lists') }}" aria-expanded="false">
-                    <i class="icon-envelope menu-icon"></i><span class="nav-text">List</span>
+                    <i class="fa fa-list-ul menu-icon"></i><span class="nav-text">List</span>
                 </a>
             </li>
             <li>
                 <a href="{{ url('/contacts') }}" aria-expanded="false">
-                    <i class="icon-grid menu-icon"></i><span class="nav-text">Semua Kontak</span>
+                    <i class="icon-people menu-icon"></i><span class="nav-text">Semua Kontak</span>
                 </a>
             </li>
         </ul>

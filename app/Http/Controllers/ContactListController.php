@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ListHelper;
+use App\Models\Contact;
 use App\Models\ContactList;
 use Illuminate\Http\Request;
 
@@ -58,6 +60,31 @@ class ContactListController extends Controller
      */
     public function show($id)
     {
+        $id = decodeId($id);
+        $contactList = ContactList::where('id', $id)->first();
+
+        if (!$contactList) {
+            abort(404);
+        }
+
+        $contacts = Contact::whereRaw("JSON_CONTAINS(contact_list_id, '\"$id\"')")->paginate(10);
+
+        return view('contact_lists.show', [
+            'page' => 'Detail Kontak List',
+            'contactList' => $contactList,
+            'contacts' => $contacts
+        ]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $id = decodeId($id);
         $contactList = ContactList::find($id);
 
         if (!$contactList) {
@@ -114,6 +141,7 @@ class ContactListController extends Controller
     public function destroy($id)
     {
         try {
+            $id = decodeId($id);
             $contactList = ContactList::find($id);
             $contactList->delete();
 
