@@ -20,7 +20,7 @@ class Contact extends Model
     {
         parent::__construct($attributes);
 
-        if (Auth::check()) {
+        if (Auth::check() && Auth::user()->role == 'user') {
             $prefix = Auth::user()->tbl_prefix;
             $this->setTable($prefix . '_contacts');
         }
