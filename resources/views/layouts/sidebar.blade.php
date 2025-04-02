@@ -7,18 +7,62 @@
             <li class="nav-label">MENU</li>
             <li>
                 <a href="{{ url('/home') }}" aria-expanded="false">
-                    <i class="icon-badge menu-icon"></i><span class="nav-text">Dashboard</span>
+                    <i class="fa fa-dashboard menu-icon"></i><span class="nav-text">Dashboard</span>
                 </a>
             </li>
-            <li class="nav-label">Kontak</li>
+            {{-- <li class="nav-label">Kontak</li> --}}
             <li>
                 <a href="{{ url('/lists') }}" aria-expanded="false">
                     <i class="fa fa-list-ul menu-icon"></i><span class="nav-text">List</span>
                 </a>
             </li>
             <li>
-                <a href="{{ url('/contacts') }}" aria-expanded="false">
-                    <i class="icon-people menu-icon"></i><span class="nav-text">Semua Kontak</span>
+                <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                    <i class="icon-people menu-icon"></i> <span class="nav-text">Kontak</span>
+                </a>
+                <ul aria-expanded="false">
+                    <li>
+                        <a href="{{ url('/fields') }}">Fields</a>
+                    </li>
+                    <li>
+                        <a href="{{ url('/contacts') }}">Daftar Kontak</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                    <i class="icon-envelope menu-icon"></i> <span class="nav-text">Pesan</span>
+                </a>
+                <ul aria-expanded="false">
+                    <li>
+                        <a href="{{ url('/templates') }}">Template Email</a>
+                    </li>
+                    <li>
+                        <a href="./email-read.html">Pesan</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="{{ url('/broadcasts') }}" aria-expanded="false">
+                    <i class="fa fa-plane menu-icon"></i><span class="nav-text">Broadcast</span>
+                </a>
+            </li>
+            <li class="nav-label">Tagihan</li>
+            <li>
+                <a href="{{ url('/pesan') }}" aria-expanded="false">
+                    <i class="fa fa-credit-card menu-icon"></i><span class="nav-text">Langganan</span>
+                </a>
+                <a href="{{ url('/pesan') }}" aria-expanded="false">
+                    <i class="fa fa-money menu-icon"></i><span class="nav-text">Pembayaran</span>
+                </a>
+            </li>
+            <li class="nav-label">Setting</li>
+            <li>
+                <a href="{{ url('/pesan') }}" aria-expanded="false">
+                    <i class="fa fa-user menu-icon"></i><span class="nav-text">Akun</span>
+                </a>
+                <a href="{{ url('/pesan') }}" aria-expanded="false">
+                    <i class="fa fa-cogs menu-icon"></i><span class="nav-text">Pengaturan</span>
                 </a>
             </li>
         </ul>

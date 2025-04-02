@@ -162,6 +162,18 @@
     <script src="{{ asset('theme') }}/js/dashboard/dashboard-1.js"></script> --}}
 
     <script type="text/javascript">
+        @if (session()->has('success'))
+            swal("Berhasil!", "{{ session()->get('success') }}", "success");
+        @endif
+
+        @if (session()->has('error'))
+            swal("Gagal!", "{{ session()->get('error') }}", "error");
+        @endif
+
+        @if (session()->has('warning'))
+            swal("Peringatan!", "{{ session()->get('warning') }}", "warning");
+        @endif
+
         async function getData(url) {
             let res = await fetch(url)
                 .then((res) => res.json())

@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\BroadcastController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\TemplateController;
+use App\Http\Controllers\FieldController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ContactController;
@@ -32,6 +36,20 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('contacts', ContactController::class);
     Route::post('contacts/upload', [ContactController::class, 'uploadFile'])->name('contacts.uploadFile');
     Route::post('contacts/process-file', [ContactController::class, 'processBatch'])->name('contacts.processBatch');
+
+    // fields
+    Route::resource('fields', FieldController::class);
+
+    // templates
+    Route::resource('templates', TemplateController::class);
+    Route::post('template/upload', [TemplateController::class, 'upload'])->name('template.upload');
+
+    // messages
+    Route::resource('messages', MessageController::class);
+    Route::post('messages/upload', [MessageController::class, 'upload'])->name('messages.upload');
+
+    // broadcasts
+    Route::resource('broadcasts', BroadcastController::class);
 });
 
 Route::resource('user', UserController::class);
