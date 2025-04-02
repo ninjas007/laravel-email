@@ -16,9 +16,9 @@
             <button class="btn btn-success btn-sm text-white" data-toggle="modal" data-target="#modalUpload">
                 <i class="fa fa-upload"></i> Upload
             </button>
-            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalCreate">
+            <a href="{{ url('contacts/create') }}" class="btn btn-primary btn-sm" >
                 <i class="fa fa-plus"></i> Buat
-            </button>
+            </a>
         </div>
     </div>
 
@@ -26,7 +26,7 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="text-title pt-2">Semua Kontak</h3>
+                    <h3 class="text-title pt-2">Daftar Kontak</h3>
                 </div>
                 <div class="card-body py-0">
                     <div class="table-responsive">
@@ -48,10 +48,11 @@
                                         <td>{{ $contact->email }}</td>
                                         <td>{{ $contact->phone }}</td>
                                         <td class="text-center">
-                                            <a href="javascript:void(0)" onclick="editContact(`{{ encodeId($contact->id) }}`)">
+                                            <a href="{{ url('contacts/' . encodeId($contact->id) . '/edit') }}"  title="Edit">
                                                 <i class="mx-2 fa fa-pencil text-primary fs18"></i>
                                             </a>
-                                            <a href="javascript:void(0)" onclick="deleteContact(`{{ encodeId($contact->id) }}`)">
+                                            <a href="javascript:void(0)"
+                                                onclick="deleteContact(`{{ encodeId($contact->id) }}`)" title="Hapus">
                                                 <i class="fa fa-trash text-danger fs18"></i>
                                             </a>
                                         </td>
@@ -90,6 +91,10 @@
                         <a href="template-contact.csv" download="template-contact.csv"
                             class="btn btn-primary btn-sm text-white"><i class="fa fa-download"></i> Unduh Template
                             CSV</a>
+                        <br>
+                        <small style="font-size: 12px; color: #999; font-style: italic">
+                            Anda juga bisa menambahkan kolom tambahan yang diperlukan
+                        </small>
                     </div>
                     <div class="form-group">
                         <label for="fileUpload">Unggah File</label> <span class="text-danger">*</span>
@@ -153,6 +158,24 @@
                                     <option value="{{ $list->id }}">{{ $list->name }}</option>
                                 @endforeach
                             </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="customFields">Custom Field</label>
+                            <br>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Nama</th>
+                                        <th>Value</th>
+                                        <th width="5%">
+                                            <button type="button" class="btn btn-sm" onclick="addCustomField()">
+                                                <i class="fa fa-plus fs18"></i>
+                                            </button>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="customFields"></tbody>
+                            </table>
                         </div>
                     </form>
                 </div>
@@ -294,5 +317,18 @@
                 swal("Error!", "Gagal mengupload file. Silahkan hubungi admin", "error");
             }
         };
+
+        function addCustomField() {
+            let tbody = `<tr>
+                <td>
+                    <input type="text" name="custom_fields[name][]" class="form-control" placeholder="Contoh: Alamat">
+                </td>
+                <td>
+                    <input type="text" name="custom_fields[value][]" class="form-control" placeholder="Contoh: Jakarta">
+                </td>
+            </tr>`
+
+            $('#customFields').append(tbody);
+        }
     </script>
 @endsection

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Contact;
 use App\Models\ContactList;
+use App\Models\Field;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -20,6 +21,20 @@ class ContactController extends Controller
             'page' => 'kontak',
             'contactList' => ContactList::all(),
             'contacts' => Contact::paginate(10)
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('contacts.create', [
+            'page' => 'Tambah Kontak',
+            'contactList' => ContactList::all(),
+            'fields' => Field::all()
         ]);
     }
 
@@ -43,26 +58,24 @@ class ContactController extends Controller
             'email.email' => 'Email tidak valid',
         ]);
 
+        $customFields = [];
+        for ($i = 0; $i < count($request->custom_fields['name']); $i++) {
+            $customFields[$request->custom_fields['name'][$i]] = $request->custom_fields['value'][$i];
+        }
+
         try {
             $contact = new Contact();
             $contact->name = $request->name;
             $contact->email = $request->email;
             $contact->phone = $request->phone ?? '';
             $contact->contact_list_id = json_encode($request->contact_list);
+            $contact->custom_fields = json_encode($customFields);
             $contact->save();
 
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Berhasil membuat kontak',
-                'data' => $contact,
-            ]);
+            return redirect()->route('contacts.index')->with('success', 'Kontak berhasil dibuat');
         } catch (\Exception $e) {
             $this->logError($request, $e);
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Gagal membuat kontak',
-                'error' => $e->getMessage(),
-            ], 500);
+            return redirect()->back()->with('error', 'Server error. Silahkan coba lagi');
         }
     }
 
@@ -77,13 +90,39 @@ class ContactController extends Controller
         $id = decodeId($id);
         $contact = Contact::find($id);
 
-        if (!$contact) {
-            return response()->json(['error' => 'Kontak tidak ditemukan'], 404);
+        if (request()->ajax()) {
+            if (!$contact) {
+                return response()->json(['error' => 'Kontak tidak ditemukan'], 404);
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $contact,
+            ]);
         }
 
-        return response()->json([
-            'status' => 'success',
-            'data' => $contact,
+        return view('contacts.show', [
+            'page' => 'Detail Kontak',
+            'contact' => $contact
+        ]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Request $request, $id)
+    {
+        $id = decodeId($id);
+        $contact = Contact::findOrFail($id);
+
+        return view('contacts.edit', [
+            'page' => 'Edit Kontak',
+            'contact' => $contact,
+            'contactList' => ContactList::all(),
+            'fields' => Field::all()
         ]);
     }
 
@@ -105,29 +144,28 @@ class ContactController extends Controller
 
         try {
             $id = decodeId($id);
-            $contact = Contact::find($id);
+            $contact = Contact::findOrFail($id);
 
             if (!$contact) {
-                return response()->json(['error' => 'Kontak tidak ditemukan'], 404);
+                return redirect()->back()->with('error', 'Kontak tidak ditemukan');
+            }
+
+            $customFields = [];
+            for ($i = 0; $i < count($request->custom_fields['name']); $i++) {
+                $customFields[$request->custom_fields['name'][$i]] = $request->custom_fields['value'][$i];
             }
 
             $contact->name = $request->name;
             $contact->email = $request->email;
             $contact->phone = $request->phone ?? '';
             $contact->contact_list_id = json_encode($request->contact_list);
+            $contact->custom_fields = json_encode($customFields);
             $contact->save();
 
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Berhasil memperbarui kontak'
-            ]);
+            return redirect()->route('contacts.index')->with('success', 'Kontak berhasil diperbarui');
         } catch (\Exception $e) {
             $this->logError($request, $e);
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Gagal memperbarui kontak',
-                'error' => $e->getMessage(),
-            ], 500);
+            return redirect()->back()->with('error', 'Server error. Silahkan coba lagi');
         }
     }
 
@@ -234,12 +272,21 @@ class ContactController extends Controller
         $dataBatch = [];
         $isHeader = true;
         $currentRow = 0;
-
+        $headers = [];
+        $customFields = [];
         while (($row = fgetcsv($handle, 1000, ',')) !== false) {
             if ($isHeader) {
+                $headers = explode(';', $row[0]);
                 $isHeader = false;
                 continue; // Lewati baris header
             }
+
+            // pastikan posisi header sesuai.
+            // kalau tidak sesuai maka return error
+            // if (!in_array($headers, ['No', 'Nama', 'Email', 'No Hp'])) {
+
+            // }
+
 
             if ($currentRow < $offset) {
                 $currentRow++;
@@ -253,10 +300,19 @@ class ContactController extends Controller
 
             $data = explode(';', $row[0]);
 
+            $customFields = [];
+
+            // jika data ke 4 dan seterusnya tidak kosong
+            for ($i = 4; isset($data[$i]); $i++) {
+                $customFields[$headers[$i]] = $data[$i];
+            }
+
+
             $dataBatch[] = [
                 'name'   => trim($data[1]),
                 'email'  => trim($data[2]),
                 'phone'  => trim($data[3] ?? ''),
+                'custom_fields' => json_encode($customFields),
                 'contact_list_id' => json_encode($request->contact_list),
                 'created_at' => now(),
                 'updated_at' => now(),

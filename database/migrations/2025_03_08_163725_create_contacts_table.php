@@ -19,6 +19,7 @@ class CreateContactsTable extends Migration
             $table->string('name')->nullable();
             $table->string('phone')->nullable();
             $table->json('contact_list_id')->nullable();
+            $table->json('custom_fields')->nullable();
             $table->timestamps();
         });
     }
