@@ -6,12 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
-class Field extends Model
+class Template extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'name',
+        'category',
+        'background_color',
+        'body_template',
     ];
 
     public function __construct(array $attributes = [])
@@ -20,9 +23,9 @@ class Field extends Model
 
         if (Auth::check() && Auth::user()->role == 'user') {
             $prefix = Auth::user()->tbl_prefix;
-            $this->setTable($prefix . '_fields');
+            $this->setTable($prefix . '_templates');
         }
 
-        return 'fields';
+        return 'templates';
     }
 }

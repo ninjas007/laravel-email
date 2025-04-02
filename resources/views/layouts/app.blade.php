@@ -134,6 +134,7 @@
 
     {{-- Seet Alert --}}
     <script src="{{ asset('theme') }}/js/sweetalert.min.js"></script>
+    <script src="{{ asset('theme') }}/js/sweetalert2@11.js"></script>
 
     <script src="{{ asset('theme') }}/plugins/common/common.min.js"></script>
     <script src="{{ asset('theme') }}/js/custom.min.js"></script>

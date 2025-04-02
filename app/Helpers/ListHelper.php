@@ -8,7 +8,9 @@ Class ListHelper
     {
         return [
             'contacts',
-            'contact_lists'
+            'contact_lists',
+            'templates',
+            'fields',
         ];
     }
 }
