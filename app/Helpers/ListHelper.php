@@ -11,6 +11,8 @@ Class ListHelper
             'contact_lists',
             'templates',
             'fields',
+            'messages',
+            'broadcasts'
         ];
     }
 }

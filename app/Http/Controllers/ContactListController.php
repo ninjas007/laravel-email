@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\ListHelper;
 use App\Models\Contact;
 use App\Models\ContactList;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ContactListController extends Controller
 {
@@ -16,9 +16,18 @@ class ContactListController extends Controller
      */
     public function index()
     {
+        $contactLists = ContactList::select(
+            'contact_lists.*',
+            DB::raw('(SELECT COUNT(*) FROM contacts
+                      WHERE JSON_CONTAINS(contacts.contact_list_id, CONCAT(\'"\', contact_lists.id, \'"\'))
+                      AND contacts.contact_list_id IS NOT NULL) AS total_contacts')
+            )
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
         return view('contact_lists.index', [
             'page' => 'List',
-            'contactLists' => ContactList::paginate(10)
+            'contactLists' => $contactLists
         ]);
     }
 

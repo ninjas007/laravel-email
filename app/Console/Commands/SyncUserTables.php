@@ -55,10 +55,10 @@ class SyncUserTables extends Command
         }
 
         // Hapus kolom yang tidak ada di master (Opsional)
-        foreach ($columnsToRemove as $column => $definition) {
-            DB::statement("ALTER TABLE `$userTable` DROP COLUMN `$column`;");
-            $this->info("Removed column `$column` from `$userTable`");
-        }
+        // foreach ($columnsToRemove as $column => $definition) {
+        //     DB::statement("ALTER TABLE `$userTable` DROP COLUMN `$column`;");
+        //     $this->info("Removed column `$column` from `$userTable`");
+        // }
     }
 
     private function getTableColumns($table)

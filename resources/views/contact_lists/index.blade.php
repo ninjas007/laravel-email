@@ -22,6 +22,7 @@
                                 <tr class="bg-primary text-white">
                                     <th width="5%" class="text-center">No</th>
                                     <th>Nama</th>
+                                    <th>Total Kontak</th>
                                     <th class="text-center" width="10%">Aksi</th>
                                 </tr>
                             </thead>
@@ -32,6 +33,7 @@
                                         <td>
                                             <a href="{{ url('lists') }}/{{ encodeId($list->id) }}" class="text-primary font-weight-bold">{{ $list->name }}</a>
                                         </td>
+                                        <td>{{ $list->total_contacts }}</td>
                                         <td class="text-center">
                                             <a href="{{ route('lists.show', encodeId($list->id)) }}" title="Detail List">
                                                 <i class="fa fa-users text-info fs18"></i>

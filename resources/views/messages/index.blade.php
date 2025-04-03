@@ -3,7 +3,7 @@
 @section('content-app')
     <div class="row mb-2">
         <div class="col-12 text-right">
-            <a href="{{ url('templates/create') }}" class="btn btn-primary btn-sm">
+            <a href="{{ url('messages/create') }}" class="btn btn-primary btn-sm">
                 <i class="fa fa-plus"></i> Buat
             </a>
         </div>
@@ -13,7 +13,7 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="text-title pt-2">Template</h3>
+                    <h3 class="text-title pt-2">Pesan</h3>
                 </div>
                 <div class="card-body py-0">
                     <div class="table-responsive">
@@ -22,28 +22,26 @@
                                 <tr class="bg-primary text-white">
                                     <th width="5%" class="text-center">No</th>
                                     <th>Nama</th>
-                                    <th>Kategori</th>
-                                    <th>Terakhir diupdate</th>
-                                    <th class="text-center" width="10%">Aksi</th>
+                                    <th>Subject</th>
+                                    <th>List</th>
+                                    <th>Template</th>
+                                    <th class="text-center" width="8%">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($templates as $key => $list)
+                                @forelse ($messages as $key => $list)
                                     <tr>
-                                        <td class="text-center">{{ $loop->iteration }}</td>
+                                        <td class="text-center">{{ $key + 1 }}</td>
                                         <td>{{ $list->name }}</td>
-                                        <td>{{ $list->category }}</td>
-                                        <td>{{ $list->updated_at->format('d M Y H:i:s') }}</td>
+                                        <td>{{ $list->subject }}</td>
+                                        <td>{{ $list->contact_list->name }}</td>
+                                        <td>{{ $list->template->name }}</td>
                                         <td class="text-center">
-                                            <a href="{{ url('templates/' . encodeId($list->id)) }}" title="Detail">
-                                                <i class="fa fa-eye text-info fs18"></i>
-                                            </a>
-                                            <a href="{{ url('templates/' . encodeId($list->id) . '/edit') }}"
-                                                title="Edit">
+                                            <a href="{{ url('messages/' . encodeId($list->id)) }}/edit">
                                                 <i class="mx-2 fa fa-pencil text-primary fs18"></i>
                                             </a>
                                             <a href="javascript:void(0)"
-                                                onclick="deleteData(`{{ url('templates') . '/' . encodeId($list->id) }}`)" title="Hapus">
+                                                onclick="deleteData(`{{ url('messages') . '/' . encodeId($list->id) }}`)" >
                                                 <i class="fa fa-trash text-danger fs18"></i>
                                             </a>
                                         </td>
@@ -56,9 +54,9 @@
                             </tbody>
                         </table>
 
-                        @if ($templates->count() > 0)
+                        @if ($messages->count() > 0)
                             <div class="d-flex justify-content-end">
-                                {{ $templates->links('pagination::bootstrap-4') }}
+                                {{ $messages->links('pagination::bootstrap-4') }}
                             </div>
                         @endif
                     </div>

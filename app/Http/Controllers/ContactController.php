@@ -58,9 +58,11 @@ class ContactController extends Controller
             'email.email' => 'Email tidak valid',
         ]);
 
-        $customFields = [];
-        for ($i = 0; $i < count($request->custom_fields['name']); $i++) {
-            $customFields[$request->custom_fields['name'][$i]] = $request->custom_fields['value'][$i];
+        if ($request->custom_fields != null && count($request->custom_fields['name']) > 0) {
+            $customFields = [];
+            for ($i = 0; $i < count($request->custom_fields['name']); $i++) {
+                $customFields[$request->custom_fields['name'][$i]] = $request->custom_fields['value'][$i];
+            }
         }
 
         try {
@@ -69,7 +71,7 @@ class ContactController extends Controller
             $contact->email = $request->email;
             $contact->phone = $request->phone ?? '';
             $contact->contact_list_id = json_encode($request->contact_list);
-            $contact->custom_fields = json_encode($customFields);
+            $contact->custom_fields = isset($customFields) ? json_encode($customFields) : null;
             $contact->save();
 
             return redirect()->route('contacts.index')->with('success', 'Kontak berhasil dibuat');
@@ -150,16 +152,18 @@ class ContactController extends Controller
                 return redirect()->back()->with('error', 'Kontak tidak ditemukan');
             }
 
-            $customFields = [];
-            for ($i = 0; $i < count($request->custom_fields['name']); $i++) {
-                $customFields[$request->custom_fields['name'][$i]] = $request->custom_fields['value'][$i];
+            if ($request->custom_fields != null && count($request->custom_fields['name']) > 0) {
+                $customFields = [];
+                for ($i = 0; $i < count($request->custom_fields['name']); $i++) {
+                    $customFields[$request->custom_fields['name'][$i]] = $request->custom_fields['value'][$i];
+                }
             }
 
             $contact->name = $request->name;
             $contact->email = $request->email;
             $contact->phone = $request->phone ?? '';
             $contact->contact_list_id = json_encode($request->contact_list);
-            $contact->custom_fields = json_encode($customFields);
+            $contact->custom_fields = isset($customFields) ? json_encode($customFields) : null;
             $contact->save();
 
             return redirect()->route('contacts.index')->with('success', 'Kontak berhasil diperbarui');

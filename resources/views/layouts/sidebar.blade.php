@@ -38,14 +38,14 @@
                         <a href="{{ url('/templates') }}">Template Email</a>
                     </li>
                     <li>
-                        <a href="./email-read.html">Pesan</a>
+                        {{-- relasikan list dengan template --}}
+                        <a href="{{ url('/messages') }}">Daftar Pesan</a>
+                    </li>
+                    <li>
+                        {{-- lihat broadcast sukses dan gagal dari daftar pesan --}}
+                        <a href="{{ url('/broadcasts') }}">Broadcast</a>
                     </li>
                 </ul>
-            </li>
-            <li>
-                <a href="{{ url('/broadcasts') }}" aria-expanded="false">
-                    <i class="fa fa-plane menu-icon"></i><span class="nav-text">Broadcast</span>
-                </a>
             </li>
             <li class="nav-label">Tagihan</li>
             <li>

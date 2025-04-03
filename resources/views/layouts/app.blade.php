@@ -29,6 +29,11 @@
         .fs18 {
             font-size: 18px;
         }
+
+        .form-control {
+            min-height: 33px !important;
+            height: 33px !important;
+        }
     </style>
 
 </head>
@@ -114,7 +119,7 @@
     ***********************************-->
         <div class="footer">
             <div class="copyright">
-                <p>Copyright &copy; {{ date('Y')}} All rights reserved</p>
+                <p>Copyright &copy; {{ date('Y') }} All rights reserved</p>
             </div>
         </div>
 
@@ -164,15 +169,15 @@
 
     <script type="text/javascript">
         @if (session()->has('success'))
-            swal("Berhasil!", "{{ session()->get('success') }}", "success");
+            Swal.fire("Berhasil!", "{{ session()->get('success') }}", "success");
         @endif
 
         @if (session()->has('error'))
-            swal("Gagal!", "{{ session()->get('error') }}", "error");
+            Swal.fire("Gagal!", "{{ session()->get('error') }}", "error");
         @endif
 
         @if (session()->has('warning'))
-            swal("Peringatan!", "{{ session()->get('warning') }}", "warning");
+            Swal.fire("Peringatan!", "{{ session()->get('warning') }}", "warning");
         @endif
 
         async function getData(url) {
@@ -200,29 +205,43 @@
                 },
                 credentials: "include",
                 beforeSend: function() {
-                    swal({
+                    Swal.fire({
                         title: "Loading...",
-                        text: "Sedang mengirim data...",
+                        text: "Menyimpan data...",
                         buttons: false,
                         closeOnClickOutside: false,
                         closeOnEsc: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        },
+                        willClose: () => {
+                            clearInterval(timerInterval);
+                        }
                     });
                 },
                 success: function(res, textStatus, xhr) {
                     if (res.status == 'success') {
-                        swal("Berhasil!", "Data berhasil disimpan.", "success").then(() => {
-                            if (redirectUrl != "") {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Berhasil",
+                            text: res.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            if (redirectUrl) {
                                 window.location.href = redirectUrl;
                             } else {
                                 location.reload();
                             }
                         });
                     } else {
-                        swal(
-                            "Error",
-                            res.message || "Terjadi kesalahan. Silahkan coba lagi.",
-                            "error"
-                        );
+                        Swal.fire({
+                            icon: "error",
+                            title: "Gagal",
+                            text: res.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
                     }
                 },
                 error: function(xhr) {
@@ -235,38 +254,34 @@
                             errorMessages += `${fieldErrors}<br>`;
                         }
 
-                        swal({
-                            title: "Error Validasi",
-                            content: {
-                                element: "div",
-                                attributes: {
-                                    innerHTML: errorMessages,
-                                },
-                            },
+                        Swal.fire({
                             icon: "error",
-                        });
+                            title: "Error Validasi",
+                            html: errorMessages
+                        })
                     } else {
-                        swal(
-                            "Error",
-                            "Terjadi kesalahan. Silahkan coba lagi.",
-                            "error"
-                        );
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error",
+                            text: "Terjadi kesalahan. Silahkan coba lagi.",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
                     }
                 },
             });
         }
 
         async function deleteData(url) {
-            swal({
-                title: "Hapus Data",
-                text: "Yakin ingin menghapus data ini",
-                icon: "warning",
-                buttons: true,
-                buttons: ["Tidak", "Ya"],
-                dangerMode: false,
-            })
-            .then((willDelete) => {
-                if (willDelete) {
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: "Data ini akan dihapus!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus!'
+            }).then((result) => {
+                if (result.isConfirmed) {
                     $.ajax({
                         url: url,
                         type: "POST",
@@ -278,7 +293,7 @@
                         },
                         credentials: "include",
                         beforeSend: function() {
-                            swal({
+                            Swal.fire({
                                 title: "Loading...",
                                 text: "Menghapus data...",
                                 buttons: false,
@@ -288,28 +303,54 @@
                         },
                         success: function(res, textStatus, xhr) {
                             if (res.status == 'success') {
-                                swal("Berhasil", "Data berhasil dihapus.", "success").then(() => {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Berhasil",
+                                    text: res.message,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                }).then(() => {
                                     location.reload();
                                 });
                             } else {
-                                swal(
-                                    "Error",
-                                    res.message ||
-                                    "Terjadi kesalahan. Silahkan coba lagi.",
-                                    "error"
-                                );
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Gagal",
+                                    text: res.message,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
                             }
                         },
                         error: function(xhr) {
-                            swal(
-                                "Error",
-                                "Terjadi kesalahan. Silahkan coba lagi.",
-                                "error"
-                            );
+                            if (xhr.status === 422) {
+                                const errors = xhr.responseJSON?.errors || {};
+
+                                let errorMessages = "";
+                                for (let field in errors) {
+                                    const fieldErrors = errors[field].join(" ");
+                                    errorMessages += `${fieldErrors}<br>`;
+                                }
+
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Error Validasi",
+                                    html: errorMessages
+                                })
+                            } else {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Error",
+                                    text: "Terjadi kesalahan. Silahkan coba lagi.",
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                            }
+
                         }
-                    });
+                    })
                 }
-            });
+            })
         }
     </script>
 

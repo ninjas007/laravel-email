@@ -72,6 +72,6 @@ class CreateNewUser implements CreatesNewUsers
         for ($i = 0; $i < $length; $i++) {
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
-        return 'emlq_'.strtolower($randomString).$userId;
+        return 'zemlq_'.strtolower($randomString).$userId;
     }
 }

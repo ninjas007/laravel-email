@@ -44,7 +44,7 @@
                             <input type="text" name="phone" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label for="">Kontak List</label> <span class="text-danger">*</span>
+                            <label for=""><a href="{{ url('lists') }}" target="_blank" class="text-primary">Kontak List</a></label> <span class="text-danger">*</span>
                             <select name="contact_list[]" class="form-control select2" multiple required>
                                 @foreach ($contactList as $list)
                                     <option value="{{ $list->id }}">{{ $list->name }}</option>

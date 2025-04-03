@@ -92,9 +92,9 @@
                             class="btn btn-primary btn-sm text-white"><i class="fa fa-download"></i> Unduh Template
                             CSV</a>
                         <br>
-                        <small style="font-size: 12px; color: #999; font-style: italic">
-                            Anda juga bisa menambahkan kolom tambahan yang diperlukan
-                        </small>
+                        <div style="color: #999; font-style: italic">
+                            Anda juga bisa menambahkan kolom tambahan yang diperlukan sesuai dengan <a href="{{ url('fields') }}" target="_blank" style="font-weight: bold">fields</a> yang telah ditambahkan.
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="fileUpload">Unggah File</label> <span class="text-danger">*</span>
@@ -121,70 +121,6 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modalCreate" tabindex="-1" role="dialog" aria-labelledby="modalCreateLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalCreateLabel">Buat Kontak</h5>
-                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="createMediaForm">
-                        <input type="hidden" id="contactId">
-                        <div class="form-group mb-3">
-                            <label for="name">Nama</label> <span class="text-danger">*</span>
-                            <input type="text" class="form-control" name="name" id="name"
-                                placeholder="Masukkan nama" required>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="email">Email</label> <span class="text-danger">*</span>
-                            <input type="text" class="form-control" name="email" id="email"
-                                placeholder="Masukkan email" required>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="phone">No Hp</label>
-                            <input type="text" class="form-control" name="no_hp" id="phone"
-                                placeholder="Masukkan no hp" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="contactListOne">Kontak List</label> <span class="text-danger">*</span>
-                            <br>
-                            <select name="contact_list_one" id="contactListOne" class="form-control select2" multiple
-                                required style="width: 100%">
-                                @foreach ($contactList as $list)
-                                    <option value="{{ $list->id }}">{{ $list->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="customFields">Custom Field</label>
-                            <br>
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Nama</th>
-                                        <th>Value</th>
-                                        <th width="5%">
-                                            <button type="button" class="btn btn-sm" onclick="addCustomField()">
-                                                <i class="fa fa-plus fs18"></i>
-                                            </button>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody id="customFields"></tbody>
-                            </table>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary btn-sm" onclick="saveContact()">Simpan</button>
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
 
 @section('js')
@@ -200,63 +136,11 @@
                 placeholder: 'Select Contact List',
                 allowClear: true,
             });
-
-            // close modal and reset form
-            $('#modalCreate').on('hidden.bs.modal', function() {
-                $('#createMediaForm').trigger('reset');
-                $('#contactId').val('');
-                $('#contactListOne').val(null).trigger('change');
-            });
         });
 
         async function deleteContact(id) {
             let url = "{{ url('contacts') }}/" + id;
             await deleteData(url);
-        }
-
-        async function saveContact() {
-            let formData = new FormData();
-            let method = 'POST';
-            let url = "{{ route('contacts.store') }}";
-            let contactList = $('#contactListOne').val();
-
-            formData.append('name', $('#name').val());
-            formData.append('email', $('#email').val());
-            formData.append('phone', $('#phone').val());
-
-            if (Array.isArray(contactList)) {
-                contactList.forEach((item, index) => {
-                    formData.append(`contact_list[${index}]`, item);
-                });
-            }
-
-            if ($('#contactId').val()) {
-                formData.append('id', $('#contactId').val());
-                formData.append('_method', 'PUT');
-                url = "{{ url('contacts') }}/" + $('#contactId').val();
-            }
-
-            await submitFormData(formData, url, method);
-        }
-
-        async function editContact(id) {
-            getData(`{{ url('contacts') }}/${id}`)
-                .then((res) => {
-                    data = res.data;
-                    $('#name').val(data.name);
-                    $('#email').val(data.email);
-                    $('#phone').val(data.phone);
-                    $('#contactId').val(data.id);
-
-                    let contactListIds = JSON.parse(data.contact_list_id) || [];
-
-                    $('#contactListOne').val(contactListIds).trigger('change');
-
-                    $('#modalCreate').modal('show');
-                })
-                .catch((err) => {
-                    console.log(err);
-                })
         }
 
         async function processFile(filePath, offset = 0) {
